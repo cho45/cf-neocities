@@ -1,0 +1,49 @@
+<!--meta.keys=["title", "entries", "years", "formatDateOnly", "formatDateForDisplay", "nl2br"]-->
+<% __this.stash.title = '日記'; %>
+<% wrapper('wrapper', () => { %>
+    <style>
+        .diary-nav { margin: 20px 0; }
+        .diary-nav a { margin-right: 15px; color: #0066cc; text-decoration: none; }
+        .diary-nav a:hover { text-decoration: underline; }
+        .diary-entry { margin-bottom: 30px; border-bottom: 1px dotted #ccc; padding-bottom: 20px; }
+        .diary-entry-date { font-weight: bold; color: #333; margin-bottom: 10px; }
+        .diary-entry-date a { color: #333; text-decoration: none; }
+        .diary-entry-date a:hover { text-decoration: underline; }
+        .diary-entry-body { white-space: pre-wrap; line-height: 1.6; }
+        .diary-entry-meta { font-size: 0.9em; color: #666; margin-top: 10px; }
+        .diary-admin-links { margin-top: 10px; }
+        .diary-admin-links a { margin-right: 10px; font-size: 0.9em; color: #0066cc; }
+        .diary-no-entries { text-align: center; color: #999; margin: 40px 0; }
+    </style>
+
+    <h1><a href="/diary">日記</a></h1>
+    
+    <div class="diary-nav">
+        <a href="/diary">最新</a>
+        <% if (years && years.length > 0) { %>
+            <% years.forEach(function(year) { %>
+                <a href="/diary/year/<%= year %>"><%= year %>年</a>
+            <% }); %>
+        <% } %>
+        <a href="/diary/new">新規投稿</a>
+    </div>
+
+    <% if (entries && entries.length > 0) { %>
+        <% entries.forEach(function(entry) { %>
+            <div class="diary-entry">
+                <div class="diary-entry-date">
+                    <a href="/diary/<%= entry.id %>"><%= formatDateOnly(entry.id) %></a>
+                </div>
+                <div class="diary-entry-body"><%=raw nl2br(entry.body) %></div>
+                <div class="diary-entry-meta">
+                    作成: <%= formatDateForDisplay(entry.createdAt) %>
+                    <% if (entry.updatedAt !== entry.createdAt) { %>
+                        / 更新: <%= formatDateForDisplay(entry.updatedAt) %>
+                    <% } %>
+                </div>
+            </div>
+        <% }); %>
+    <% } else { %>
+        <div class="diary-no-entries">日記がまだありません。</div>
+    <% } %>
+<% }); /* end of wrapper */ %>

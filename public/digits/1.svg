@@ -1,0 +1,17 @@
+<svg width="40" height="60" viewBox="0 0 40 60" xmlns="http://www.w3.org/2000/svg">
+  <rect width="40" height="60" fill="black"/>
+  <!-- a: 上部水平（消灯） -->
+  <rect x="5" y="5" width="30" height="8" rx="3" fill="#222"/>
+  <!-- b: 右上縦 -->
+  <rect x="32" y="10" width="8" height="20" rx="3" fill="white"/>
+  <!-- c: 右下縦 -->
+  <rect x="32" y="30" width="8" height="20" rx="3" fill="white"/>
+  <!-- d: 下部水平（消灯） -->
+  <rect x="5" y="47" width="30" height="8" rx="3" fill="#222"/>
+  <!-- e: 左下縦（消灯） -->
+  <rect x="2" y="30" width="8" height="20" rx="3" fill="#222"/>
+  <!-- f: 左上縦（消灯） -->
+  <rect x="2" y="10" width="8" height="20" rx="3" fill="#222"/>
+  <!-- g: 中央水平（消灯） -->
+  <rect x="5" y="26" width="30" height="8" rx="3" fill="#222"/>
+</svg>

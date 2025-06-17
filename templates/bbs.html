@@ -1,0 +1,83 @@
+<!--meta.keys=["title", "name", "body", "formMsg", "posts", "pager"]-->
+<% __this.stash.title = 'BBS'; %>
+<% wrapper('wrapper', () => { %>
+  <h1><a href="/bbs">掲示板</a></h1>
+  <div class="bbs-form">
+    <form id="postForm" method="post" action="/bbs/post">
+      <label>おなまえ <input name="name" maxlength="20" required value="<%= name || '' %>"></label>
+      <label>本文 <br><textarea name="body" maxlength="300" required><%= body || '' %></textarea></label>
+      <label>削除キー（任意）<input name="deleteKey" maxlength="32" type="password" autocomplete="off"></label>
+      <button type="submit">書き込む</button>
+    </form>
+    <div id="formMsg"></div>
+  </div>
+  <div class="bbs-list" id="bbsList">
+    <% if (posts.length === 0) { %>
+      <div>まだ投稿はありません</div>
+    <% } else { %>
+      <% posts.forEach(function(post) { %>
+        <div class="bbs-post" data-id="<%= post.id %>">
+          <div class="bbs-meta"><%= post.name %> さん 
+			<time datetime="<%= post.date %>"><%= post.date %></time>
+			 <span style="font-size:0.8em;color:#aaa;">[<%= post.ipHash ? 'ID:' + post.ipHash : '' %>]</span></div>
+          <div class="bbs-body"><%= post.body %></div>
+          <% if (post.deleteKey) { %>
+			<form class="bbs-delete-form" method="post" action="/bbs/delete" style="display:inline;">
+				<input type="password" name="deleteKey" placeholder="削除キー" maxlength="32" autocomplete="off" required>
+				<input type="hidden" name="id" value="<%= post.id %>"><button class="bbs-delete" title="削除">削除</button>
+			</form>
+		  <% } %>
+        </div>
+      <% }); %>
+    <% } %>
+  </div>
+  <div id="bbsPaging" style="margin:1em 0;">
+    <% if (pager.total > 0) { %>
+      <form method="get" action="/bbs" style="display:inline;">
+        <button name="offset" value="<%= Math.max(pager.offset - pager.limit, 0) %>" <%= pager.offset === 0 ? 'disabled' : '' %>>次へ</button>
+      </form>
+      <span style="margin:0 1em;"><%= Math.max(pager.total - pager.offset - pager.limit + 1, 1) %>～<%= pager.total - pager.offset %> 件目 / 全<%= pager.total %>件</span>
+      <form method="get" action="/bbs" style="display:inline;">
+        <button name="offset" value="<%= pager.offset + pager.limit %>" <%= pager.offset + pager.limit >= pager.total ? 'disabled' : '' %>>前へ</button>
+      </form>
+    <% } %>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('form[method="post"]').forEach(function(form) {
+        form.addEventListener('submit', async function(e) {
+          e.preventDefault();
+          const formData = new FormData(form);
+          const data = {};
+          formData.forEach((v, k) => { data[k] = v; });
+          const res = await fetch(form.action, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: JSON.stringify(data)
+          });
+          if (form.id === 'postForm') {
+            const msg = document.getElementById('formMsg');
+            if (!res.ok) {
+              msg.textContent = await res.text();
+              msg.className = 'bbs-error';
+            } else {
+              msg.textContent = '書き込み完了！';
+              msg.className = 'bbs-success';
+              form.reset();
+              location.reload();
+            }
+          } else if (form.classList.contains('bbs-delete-form')) {
+            if (res.ok) {
+              location.reload();
+            } else {
+              alert(await res.text());
+            }
+          }
+        });
+      });
+    });
+  </script>
+<% }); /* end of wrapper */ %>

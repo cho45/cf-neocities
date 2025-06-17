@@ -1,0 +1,37 @@
+<!--meta.keys=["title", "year", "months", "allYears"]-->
+<% __this.stash.title = year + '年 - 日記アーカイブ'; %>
+<% wrapper('wrapper', () => { %>
+    <style>
+        .diary-nav { margin: 20px 0; }
+        .diary-nav a { margin-right: 15px; color: #0066cc; text-decoration: none; }
+        .diary-nav a:hover { text-decoration: underline; }
+        .diary-month-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin: 20px 0; }
+        .diary-month-link { display: block; padding: 10px; text-align: center; border: 1px solid #ddd; color: #0066cc; text-decoration: none; }
+        .diary-month-link:hover { background-color: #f5f5f5; }
+    </style>
+
+    <h1><%= year %>年 日記アーカイブ</h1>
+    
+    <div class="diary-nav">
+        <a href="/diary">最新日記</a>
+        <% if (allYears && allYears.length > 0) { %>
+            <% allYears.forEach(function(y) { %>
+                <% if (y !== year) { %>
+                    <a href="/diary/year/<%= y %>"><%= y %>年</a>
+                <% } %>
+            <% }); %>
+        <% } %>
+    </div>
+
+    <% if (months && months.length > 0) { %>
+        <div class="diary-month-list">
+            <% months.forEach(function(month) { %>
+                <a href="/diary/year/<%= year %>/month/<%= month %>" class="diary-month-link">
+                    <%= month %>月
+                </a>
+            <% }); %>
+        </div>
+    <% } else { %>
+        <p><%= year %>年には日記がありません。</p>
+    <% } %>
+<% }); /* end of wrapper */ %>

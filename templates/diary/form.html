@@ -1,0 +1,117 @@
+<!--meta.keys=["title", "isEdit", "entry", "date", "body", "error"]-->
+<% __this.stash.title = (isEdit ? '編集' : '新規投稿') + ' - 日記'; %>
+<% wrapper('wrapper', () => { %>
+    <style>
+        .diary-nav { margin: 20px 0; }
+        .diary-nav a { margin-right: 15px; color: #0066cc; text-decoration: none; }
+        .diary-nav a:hover { text-decoration: underline; }
+        .diary-form-group { margin-bottom: 15px; }
+        .diary-form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .diary-form-group input[type="date"] { padding: 5px; font-size: 14px; }
+        .diary-form-group textarea { width: 100%; height: 300px; padding: 10px; font-family: serif; font-size: 14px; box-sizing: border-box; }
+        .diary-form-buttons { margin-top: 20px; }
+        .diary-form-buttons button { padding: 10px 20px; margin-right: 10px; font-size: 14px; }
+        .diary-error { color: red; margin-bottom: 15px; }
+    </style>
+
+    <h1>日記 - <%= isEdit ? '編集' : '新規投稿' %></h1>
+    
+    <div class="diary-nav">
+        <a href="/diary">一覧に戻る</a>
+        <% if (isEdit && entry) { %>
+            <a href="/diary/<%= entry.id %>">詳細に戻る</a>
+        <% } %>
+    </div>
+
+    <% if (error) { %>
+        <div class="diary-error"><%= error %></div>
+    <% } %>
+
+    <form method="POST" action="<%= isEdit ? '/diary/' + entry.id + '/edit' : '/diary' %>">
+        <div class="diary-form-group">
+            <label for="date">日付:</label>
+            <input type="date" id="date" name="date" value="<%= date %>" required>
+        </div>
+        
+        <div class="diary-form-group">
+            <label for="body">本文:</label>
+            <textarea id="body" name="body" required placeholder="今日の出来事を書いてください..."><%= body || '' %></textarea>
+        </div>
+        
+        <div class="diary-form-buttons">
+            <button type="submit"><%= isEdit ? '更新' : '投稿' %></button>
+            <button type="button" onclick="history.back()">キャンセル</button>
+            <% if (isEdit && entry) { %>
+                <button type="button" onclick="handleDelete('<%= entry.id %>')" style="background-color:#dc3545;color:white;border:1px solid #dc3545;">削除</button>
+            <% } %>
+        </div>
+        
+        <input type="hidden" name="x-requested-with" value="XMLHttpRequest">
+    </form>
+
+    <script>
+        // CSRFトークン代わりにx-requested-withヘッダーを送信
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            
+            fetch(this.action, {
+                method: 'POST',
+                headers: {
+                    'x-requested-with': 'XMLHttpRequest'
+                },
+                body: formData
+            })
+            .then(response => {
+                if (response.ok || response.status === 302) {
+                    // 成功時は詳細ページにリダイレクト（レスポンスからURLを取得）
+                    return response.text().then(text => {
+                        if (text.startsWith('/diary/')) {
+                            window.location.href = text;
+                        } else {
+                            // HTMLレスポンスの場合は表示
+                            document.open();
+                            document.write(text);
+                            document.close();
+                        }
+                    });
+                } else {
+                    // エラーの場合はHTMLを表示
+                    return response.text().then(text => {
+                        document.open();
+                        document.write(text);
+                        document.close();
+                    });
+                }
+            })
+            .catch(() => {
+                alert('送信に失敗しました。');
+            });
+        });
+
+        function handleDelete(entryId) {
+            if (!confirm('本当に削除しますか？')) {
+                return;
+            }
+            
+            fetch(`/diary/${entryId}/delete`, {
+                method: 'POST',
+                headers: {
+                    'x-requested-with': 'XMLHttpRequest'
+                }
+            })
+            .then(response => {
+                if (response.ok || response.status === 302) {
+                    // 削除成功時は日記一覧にリダイレクト
+                    window.location.href = '/diary';
+                } else {
+                    alert('削除に失敗しました。');
+                }
+            })
+            .catch(() => {
+                alert('削除に失敗しました。');
+            });
+        }
+    </script>
+<% }); /* end of wrapper */ %>

@@ -1,0 +1,115 @@
+<!--meta.keys=["title", "content"]-->
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title><%= title %></title>
+  <style>
+    body {
+      font-family: 'MS PGothic', 'Osaka', 'Arial', sans-serif;
+      background: #fffbe7;
+      color: #222;
+      text-align: center;
+      margin-top: 2em;
+    }
+    h1 {
+      font-size: 2em;
+      color: #0066cc;
+      text-shadow: 1px 1px 0 #fff, 2px 2px 0 #bde6ff;
+      border-bottom: 3px double #0099cc;
+      display: block;
+      padding: 0.2em 1em 0.1em 1em;
+      background: #fff;
+      border-radius: 8px 8px 0 0;
+      margin: 0 auto 1em auto;
+      width: fit-content;
+    }
+    .bbs-form {
+      background: #e0f7fa;
+      border: 2px solid #b2ebf2;
+      border-radius: 8px;
+      display: block;
+      padding: 1em 2em;
+      margin: 0 auto 2em auto;
+      box-shadow: 2px 2px 0 #ccc;
+      max-width: 500px;
+    }
+    .bbs-form input, .bbs-form textarea {
+      font-family: inherit;
+      font-size: 1em;
+      margin: 0.2em 0;
+      border: 1px solid #bbb;
+      border-radius: 4px;
+      padding: 0.3em 0.5em;
+      width: 90%;
+      box-sizing: border-box;
+    }
+    .bbs-form textarea {
+      min-height: 4em;
+      resize: vertical;
+    }
+    .bbs-form label {
+      display: block;
+      margin-top: 0.5em;
+      text-align: left;
+    }
+    .bbs-form button {
+      margin-top: 1em;
+      padding: 0.5em 2em;
+      font-size: 1em;
+      background: #fffbe7;
+      border: 1px solid #aaa;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .bbs-list {
+      margin: 2em auto 0 auto;
+      max-width: 600px;
+      text-align: left;
+      display: block;
+    }
+    .bbs-post {
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin-bottom: 1.2em;
+      padding: 0.8em 1em;
+      box-shadow: 1px 1px 0 #eee;
+      position: static;
+      display: block;
+    }
+    .bbs-post .bbs-meta {
+      font-size: 0.9em;
+      color: #888;
+      margin-bottom: 0.3em;
+      display: block;
+    }
+    .bbs-post .bbs-body {
+      white-space: pre-wrap;
+      word-break: break-all;
+      margin-bottom: 0.5em;
+      display: block;
+    }
+    .bbs-post .bbs-delete {
+      font-size: 0.9em;
+      color: #c00;
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-decoration: underline;
+      display: inline;
+      position: static;
+      float: none;
+    }
+    .bbs-error, .bbs-success {
+      display: block;
+      margin: 1em 0;
+    }
+  </style>
+</head>
+<body>
+	<a href="/">トップページ</a> | <a href="/bbs">掲示板</a> | <a href="/diary">日記</a>
+	<%=raw content %>
+</body>
+</html>

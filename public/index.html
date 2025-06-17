@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cho45のほーむぺーじ</title>
+    <style>
+      body {
+        font-family: 'MS PGothic', 'Osaka', 'Arial', sans-serif;
+        background: #bde6ff;
+        color: #222;
+        text-align: center;
+        margin-top: 3em;
+      }
+      .counter-img {
+        background: #fffbe7;
+        border: 2px inset #aaa;
+        padding: 8px 16px;
+        border-radius: 4px;
+        display: inline-block;
+        box-shadow: 2px 2px 0 #ccc;
+        margin-bottom: 1em;
+      }
+      .kiri {
+        color: #ff0000;
+        font-weight: bold;
+        margin-top: 1em;
+        text-shadow: 1px 1px 0 #fff, 2px 2px 0 #ffcccc;
+      }
+      h1 {
+        font-size: 2.2em;
+        color: #0066cc;
+        text-shadow: 1px 1px 0 #fff, 2px 2px 0 #bde6ff;
+        border-bottom: 3px double #0099cc;
+        display: block;
+        padding: 0.2em 1em 0.1em 1em;
+        background: #fffbe7;
+        border-radius: 8px 8px 0 0;
+        margin: 0 auto 1em auto;
+        width: fit-content;
+      }
+      .footer {
+        margin-top: 3em;
+        font-size: 0.9em;
+        color: #666;
+        border-top: 1px dotted #aaa;
+        padding-top: 1em;
+      }
+      marquee {
+        color: #ff00cc;
+        font-size: 1.1em;
+        margin-bottom: 1em;
+      }
+      a {
+        color: #0099cc;
+        text-decoration: underline;
+      }
+      .intro {
+        margin: 1.5em auto 2em auto;
+        font-size: 1.1em;
+        color: #333;
+        background: #fffbe7;
+        border: 1px dashed #ffcc99;
+        border-radius: 8px;
+        padding: 1em 2em;
+        display: block;
+        text-align: left;
+        max-width: 500px;
+      }
+      .intro ul {
+        margin: 1em auto 0 auto;
+        max-width: 400px;
+      }
+      .intro p {
+        margin: 0.5em 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <marquee behavior="alternate" scrollamount="4" style="display:block;margin-bottom:1em;">ようこそ！あなたは <img id="counter" alt="counter" style="max-height: 25px; vertical-align:middle;"> 人目の訪問者です！</marquee>
+    </div>
+    <h1 style="margin-bottom:1em;">cho45のほーむぺーじ</h1>
+    <div class="intro" style="margin-bottom:2em;">
+      <p>こんにちは！管理人のcho45です。</p>
+      <ul style="margin:1em 0 0 1.5em;padding:0;list-style:disc inside;">
+        <li>日記は気が向いたら更新します</li>
+        <li>リンクフリー・相互リンク歓迎！</li>
+        <li>掲示板への書き込み大歓迎です</li>
+        <li>素材はご自由にお使いください</li>
+        <li>バナー募集中！</li>
+      </ul>
+      <div style="text-align:center">
+        <a href="/diary">日記</a>
+      </div>
+    </div>
+    <div id="kiri" class="kiri" style="margin-bottom:2em;"></div>
+    <div class="footer" style="margin-top:2em;">
+      <a href="/">トップページへ</a> ｜ <a href="./bbs">掲示板</a> ｜ <a href="https://github.com/cho45/">素材置き場</a><br>
+      <span style="font-size:0.8em;">&copy; 2001-2025 cho45</span>
+    </div>
+    <script>
+      // カウントアップしてSVGを一度だけ取得
+      async function updateCounter() {
+        const res = await fetch('/counter', {
+          method: 'POST',
+          headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        });
+        const data = await res.json();
+        document.getElementById('counter').src = 'data:image/svg+xml;,' + encodeURIComponent(data.svg);
+        // キリ番判定
+        if (data.kiriban) {
+          document.getElementById('kiri').innerHTML =
+            '★☆ キリ番おめでとうございます！ <a href="./bbs">掲示板に記念書き込みする</a> ☆★';
+        } else {
+          document.getElementById('kiri').textContent = '';
+        }
+      }
+      // ページ表示時にカウントアップ＆SVGを一度だけ取得
+      updateCounter();
+    </script>
+  </body>
+</html>
