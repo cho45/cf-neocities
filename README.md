@@ -100,6 +100,8 @@ const app = new Hono<{ Bindings: CloudflareBindings }>()
 
 ## アーキテクチャ
 
+![Architecture Diagram](docs/images/architecture.png)
+
 ### Durable Objects
 
 - **Counter**: アトミックなインクリメント操作
