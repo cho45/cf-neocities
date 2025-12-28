@@ -1,5 +1,7 @@
 # CF-Neocities
 
+![Top Page](docs/images/top.png)
+
 HonoフレームワークとCloudflare Workersを使用したウェブアプリケーションです。
 
 ## 機能
@@ -9,6 +11,12 @@ HonoフレームワークとCloudflare Workersを使用したウェブアプリ�
 - **Diary**: Basic認証付き日記システム
 - **テンプレートシステム**: ビルド時コンパイル付きHTMLテンプレート
 - **静的アセット**: カウンター表示用SVG数字レンダリング
+
+### 画面イメージ
+
+| BBS | Diary |
+| --- | --- |
+| ![BBS](docs/images/bbs.png) | ![Diary](docs/images/diary.png) |
 
 ## 技術スタック
 
